@@ -1,0 +1,146 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <numeric> // Для std::accumulate
+
+// Определение класса Student
+class Student {
+private:
+    std::string name; // Имя студента
+    int age;         // Возраст студента
+    double gpa;      // Средний балл студента
+    std::string id;  // Идентификационный номер студента
+    std::string faculty; // Факультет студента
+    std::vector<double> grades; // Список оценок студента
+
+public:
+    // Конструктор класса, принимающий аргументы для инициализации свойств
+    Student(const std::string &name, int age, const std::string &id, const std::string &faculty)
+        : name(name), age(age), id(id), faculty(faculty), gpa(0.0) {}
+
+    // Геттер для имени студента
+    std::string getName() const {
+        return name;
+    }
+
+    // Геттер для возраста студента
+    int getAge() const {
+        return age;
+    }
+
+    // Геттер для среднего балла студента
+    double getGPA() const {
+        return gpa;
+    }
+
+    // Геттер для идентификационного номера студента
+    std::string getID() const {
+        return id;
+    }
+
+    // Геттер для факультета студента
+    std::string getFaculty() const {
+        return faculty;
+    }
+
+    // Геттер для списка оценок студента
+    std::vector<double> getGrades() const {
+        return grades;
+    }
+
+    // Сеттер для имени студента
+    void setName(const std::string &name) {
+        this->name = name;
+    }
+
+    // Сеттер для возраста студента
+    void setAge(int age) {
+        this->age = age;
+    }
+
+    // Сеттер для идентификационного номера студента
+    void setID(const std::string &id) {
+        this->id = id;
+    }
+
+    // Сеттер для факультета студента
+    void setFaculty(const std::string &faculty) {
+        this->faculty = faculty;
+    }
+
+    // Метод для добавления оценки
+    void addGrade(double grade) {
+        grades.push_back(grade); // Добавление оценки в список
+        updateGPA(); // Обновление среднего балла
+    }
+
+    // Метод для подсчета оценки студента на основе среднего балла
+    std::string getGrade() const {
+        if (gpa > 8.0) {
+            return "Отлично";
+        } else if (gpa >= 6.0) {
+            return "Хорошо";
+        } else if (gpa >= 4.0) {
+            return "Удовлетворительно";
+        } else {
+            return "Неудовлетворительно";
+        }
+    }
+
+    // Метод для вывода информации о студенте
+    void printInfo() const {
+        std::cout << "Имя: " << name 
+                  << ", Возраст: " << age 
+                  << ", ID: " << id 
+                  << ", Факультет: " << faculty 
+                  << ", Средний балл: " << gpa 
+                  << ", Оценка: " << getGrade() << std::endl;
+    }
+
+private:
+    // Метод для обновления среднего балла студента
+    void updateGPA() {
+        if (!grades.empty()) {
+            double sum = std::accumulate(grades.begin(), grades.end(), 0.0); // Суммирование всех оценок
+            gpa = sum / grades.size(); // Расчет среднего балла
+        }
+    }
+};
+
+int main() {
+    // Создание экземпляров класса Student с инициализацией свойств
+    Student student1("Иван Иванов", 20, "S12345", "Компьютерные науки");
+    Student student2("Алексей Смирнов", 21, "S12346", "Математика");
+    Student student3("Мария Кузнецова", 19, "S12347", "Физика");
+    Student student4("Анна Петрова", 22, "S12348", "Химия");
+
+    // Добавление оценок студентам
+    student1.addGrade(9.2);
+    student1.addGrade(8.5);
+
+    student2.addGrade(7.5);
+    student2.addGrade(6.8);
+
+    student3.addGrade(5.8);
+    student3.addGrade(6.2);
+
+    student4.addGrade(3.5);
+    student4.addGrade(4.0);
+
+    // Вывод информации о студентах
+    student1.printInfo();
+    student2.printInfo();
+    student3.printInfo();
+    student4.printInfo();
+
+    // Изменение свойств студента 3
+    student3.setName("Мария Кузьмина");
+    student3.setAge(20);
+    student3.setFaculty("Астрономия");
+    student3.addGrade(7.0); // Добавление новой оценки для пересчета GPA
+
+    // Вывод обновленной информации о студенте 3
+    student3.printInfo();
+
+    return 0;
+}
